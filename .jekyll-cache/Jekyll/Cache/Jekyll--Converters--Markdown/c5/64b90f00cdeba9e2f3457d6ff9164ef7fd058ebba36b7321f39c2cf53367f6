@@ -1,0 +1,9 @@
+I"2<h2 id="installing-packages">Installing Packages</h2>
+<p>For this tutorial, I’ll be using two packages: rvest an dplyr. Make sure you install them and load them in.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">install</span><span class="p">.</span><span class="n">packages</span><span class="p">(</span><span class="s">'rvest'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="the-webpage">The webpage</h2>
+<p><img src="/img/post/imdb-page.jpeg" alt="IMDb page" /></p>
+:ET
