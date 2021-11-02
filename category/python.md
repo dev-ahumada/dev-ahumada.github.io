@@ -1,6 +1,6 @@
 ---
 layout: category
-title: posts/jekyll
-permalink: '/posts/jekyll'
+title: posts/python
+permalink: '/posts/python'
 background: '/img/bg-index.jpg'
 ---
