@@ -1,6 +1,6 @@
 ---
 layout: tagpage
-title: "Tag: Tkinter]"
-tag: Tkinter]
+title: "Tag: opencv"
+tag: opencv
 robots: noindex
 ---

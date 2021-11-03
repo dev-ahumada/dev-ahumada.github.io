@@ -1,0 +1,59 @@
+I"�"<p>La detección de idioma es una tarea del procesamiento de lenguaje natural en donde necesitamos identificar el idioma de un texto o documento. Usar aprendizaje automático (<strong>machine learning</strong>) para la identificación de un idioma era una labor difícil hace algunos años debido a que no había una gran cantidad de datos sobre idiomas, pero la disponibilidad de datos en la actualidad ha facilitado las cosas. Por lo tanto, ahora tenemos muchos modelos poderosos disponibles para la identificación de lenguajes. Entonces, si quieres aprender como entrenar un modelo para la detección de idiomas, este artículo es para ti.
+<img src="/img/posts/2021-05-09-detector-idioma-machine-learning/2021-05-09-detector-idioma-machine-learning-1.png" alt="traductor de Google" /></p>
+
+<h1 id="detección-de-lenguaje">Detección de lenguaje</h1>
+<p>Como humanos, podemos identificar fácilmente los idiomas que conocemos. Sin embargo, identificar el resto de idiomas existentes nos es casi imposible. Es aquí cuando la detección de mensajes puede ser usada. El Traductor de Google es uno de los más populares traductores en el mundo. También incluye un modelo de aprendizaje automático para detectar el idioma que tu puedes usar si no sabes que idioma es el que deseas traducir.
+La parte más importante de entrenar un modelo para la detección de idiomas son los datos. Cuantos más datos tengamos sobre cada idioma, más preciso será el rendimiento de nuestro modelo en tiempo real. El set de datos que usaremos lo obtendremos de Kaggle, contiene datos en 22 idiomas diferentes y 1000 frases en cada uno de los idiomas, por lo que será un dataset apropiado para entrenar un detector de idiomas con aprendizaje automático usando Python.</p>
+
+<h1 id="detección-de-lenguaje-usando-python">Detección de lenguaje usando Python</h1>
+<p>Empezamos la detección de lenguaje con aprendizaje automático importando las librerías de Python necesarias y el set de datos:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">CountVectorizer</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">sklearn.naive_bayes</span> <span class="kn">import</span> <span class="n">MultinomialNB</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"https://raw.githubusercontent.com/amankharwal/Website-data/master/dataset.csv"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">head</span><span class="p">())</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>                                                Text  language
+0  klement gottwaldi surnukeha palsameeriti ning ...  Estonian
+1  sebes joseph pereira thomas  på eng the jesuit...   Swedish
+2  ถนนเจริญกรุง อักษรโรมัน thanon charoen krung เ...      Thai
+3  விசாகப்பட்டினம் தமிழ்ச்சங்கத்தை இந்துப் பத்திர...     Tamil
+4  de spons behoort tot het geslacht haliclona en...     Dutch
+</code></pre></div></div>
+
+<p>Veamos si este set de datos contiene algún valor <code class="language-plaintext highlighter-rouge">null</code>:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">data</span><span class="p">.</span><span class="n">isnull</span><span class="p">().</span><span class="nb">sum</span><span class="p">()</span>
+</code></pre></div></div>
+<p>Ahora, veamos todos los idiomas presentes en nuestro set de datos:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">data</span><span class="p">[</span><span class="s">"language"</span><span class="p">].</span><span class="n">value_counts</span><span class="p">()</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Text        0
+language    0
+dtype: int64
+</code></pre></div></div>
+<p>El set de datos contiene 22 idiomas con 1000 frases cada uno. Este es un set de datos bastante balanceado y sin valores faltantes, por lo que podemos decir que este set de datos está completamente listo para ser usado para entrenar un modelo de aprendizaje automático.</p>
+
+<h1 id="modelo-para-detección-de-idioma">Modelo para detección de idioma</h1>
+<p>A continuación, vamos a dividir nuestra data en un set de entranamiento y un set de prueba:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">"Text"</span><span class="p">])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">"language"</span><span class="p">])</span>
+<span class="n">cv</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">()</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">cv</span><span class="p">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.33</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</code></pre></div></div>
+<p>Como este es un problema de clasificación multiclase, usaremos el algoritmo Naive Bayes Multinomial para entrenar el modelo de detección de idiomas ya que este algoritmo tiene un desempeño muy bueno en problemas basados en clasificación multiclase:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">modelo</span> <span class="o">=</span> <span class="n">MultinomialNB</span><span class="p">()</span>
+<span class="n">modelo</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">modelo</span><span class="p">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+</code></pre></div></div>
+<p>Finalmente, usaremos este modelo para detectar el idioma de una frase ingresada por el usuario:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">usuario</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Escribe una frase: "</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">cv</span><span class="p">.</span><span class="n">transform</span><span class="p">([</span><span class="n">usuario</span><span class="p">]).</span><span class="n">toarray</span><span class="p">()</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span>
+</code></pre></div></div>
+<p>Como podemos ver, el modelo trabaja bien. Una cosa a resaltar es que <strong>este modelo solamente puede detectar los idiomas que están presentes en el set de datos.</strong></p>
+:ET

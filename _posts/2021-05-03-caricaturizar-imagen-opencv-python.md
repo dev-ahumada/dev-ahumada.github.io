@@ -2,10 +2,10 @@
 layout: post
 title: "Caricaturizar una imagen"
 subtitle: "Creación de una foto caricaturizada usando Python y OpenCV."
-date: 2021-03-05 00:00:00 -0400
+date: 2021-05-03 00:00:00 -0400
 background: '/img/posts/2021-05-03-caricaturizar-imagen-opencv-python/2021-05-03-caricaturizar-imagen-opencv-python-1.png'
-categories: posts/python
-tags: [OpenCV, Tkinter]
+categories: posts/machine-learning
+tags: [opencv, tkinter]
 ---
 
 # Qué es OpenCV?
@@ -242,5 +242,4 @@ ventanaPrincipal.mainloop()
 ![Resultado final](/img/posts/2021-05-03-caricaturizar-imagen-opencv-python/2021-05-03-caricaturizar-imagen-opencv-python-11.png)
 
 ---
-# Descargar
 Puedes descargar el código fuente del projecto *Caricaturizar imagen en Python* [aquí](https://drive.google.com/file/d/1Ius1RFI-0CzkL89fOmb-EZfBtKrUp4lB/view?usp=sharing)
