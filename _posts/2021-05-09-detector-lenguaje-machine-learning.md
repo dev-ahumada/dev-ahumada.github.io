@@ -28,7 +28,7 @@ in [1]:     import pandas as pd
             print(data.head())
 ```
 ```python
-out [1]:                                                    Text  language 
+out [1]:       Text                                               language 
             0  klement gottwaldi surnukeha palsameeriti ning ...  Estonian 
             1  sebes joseph pereira thomas  på eng the jesuit...   Swedish 
             2  ถนนเจริญกรุง อักษรโรมัน thanon charoen krung เ...          Thai 

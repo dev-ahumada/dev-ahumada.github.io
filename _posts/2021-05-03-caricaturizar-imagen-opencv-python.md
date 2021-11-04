@@ -189,7 +189,8 @@ etiqueta = Label(ventanaPrincipal, background='#CDCDCD', font=('calibri', 20, 'b
 
 ## Paso 11: Crear botón caricaturizar en ventana principal
 ```python
-botonCaricaturizar = Button(ventanaPrincipal, text="Caricaturizar una imagen", command=cargar, padx=10, pady=5)
+botonCaricaturizar = Button(ventanaPrincipal, text="Caricaturizar una imagen", 
+                            command=cargar, padx=10, pady=5)
 botonCaricaturizar.configure(background='#364156', foreground='white', font=('calibri', 10, 'bold'))
 botonCaricaturizar.pack(side=TOP, pady=50)
 ```
@@ -197,10 +198,12 @@ botonCaricaturizar.pack(side=TOP, pady=50)
 
 ---
 
-## Paso 13: Crear botón "Guardar" en ventana principal
+## Paso 12: Crear botón "Guardar" en ventana principal
 ```python
-botonGuardar = Button(ventanaPrincipal, text='Guardar imagen caricaturizada', command=lambda: guardar(redimen6, rutaImagen), padx=30, pady=5)
-botonGuardar.configure(background='#364156', foreground='white', font=('calibri', 10, 'bold'))
+botonGuardar = Button(ventanaPrincipal, text='Guardar imagen caricaturizada', 
+                      command=lambda: guardar(redimen6, rutaImagen), padx=30, pady=5)
+botonGuardar.configure(background='#364156', foreground='white',
+                       font=('calibri', 10, 'bold'))
 botonGuardar.pack(side=TOP, pady=50)
 ```
 El código anterior crea un botón tan pronto como la transformación de la imagen es hecha. Dándole al usuario la opción de guardar la imagen caricaturizada.
@@ -209,7 +212,7 @@ El código anterior crea un botón tan pronto como la transformación de la imag
 
 ---
 
-## Paso 10: Crear mensaje de guardado
+## Paso 13: Crear mensaje de guardado
 ```python
 def guardar(redimen6, rutaImagen):
     #guardar imagen usando imwrite()
