@@ -1,6 +1,6 @@
 ---
 layout: tagpage
-title: "Tag: numpy,"
-tag: numpy,
+title: "Tag: numpy"
+tag: numpy
 robots: noindex
 ---

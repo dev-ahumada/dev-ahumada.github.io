@@ -34,8 +34,7 @@ out [1]:     	country      iso_code  date 	   total_vaccinations 	people_vaccina
 
 ---  
 
-A continuación, exploraremos un poco más el set de datos.  
-La opción `max_rows` nos permite controlar el número de columnas que `pandas` imprime. Recibe un entero o  `None` para imprimir todas las filas.
+A continuación, exploraremos un poco más el set de datos. La opción `max_rows` nos permite controlar el número de columnas que `pandas` imprime. Recibe un entero o  `None` para imprimir todas las filas.
 ```python
 in [2]:     pd.set_option("max_rows", None)
 ```
@@ -54,7 +53,7 @@ out [3]:    Scotland                290
             Northern Ireland        289
             Name: country, Length: 175, dtype: int64
 ```
-El Reino Unido está conformado por Inglaterra, Escocia, Gales e Irlanda del Norte. Pero en los datos anteriores, estos países se mencionan por separada los mis valores muy parecidos. Esto puede ser un error al registrar estos datos. Podemos arreglar esto de la siguiente manera:
+El Reino Unido está conformado por Inglaterra, Escocia, Gales e Irlanda del Norte. Pero en los datos anteriores, estos países se mencionan por separado con valores muy parecidos. Esto puede ser un error al registrar los datos. Podemos arreglar esto de la siguiente manera:
 ```python
 in [4]:     data = data[data.country.apply(lambda x: x not in ["Scotland", "England", "Wales", "Northern Ireland"])]
             data.country.value_counts()

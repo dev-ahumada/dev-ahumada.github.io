@@ -1,4 +1,4 @@
-I"wy<h1 id="análisis-de-las-vacunas-de-covid-19-con-python">Análisis de las vacunas de COVID-19 con Python</h1>
+I"sy<h1 id="análisis-de-las-vacunas-de-covid-19-con-python">Análisis de las vacunas de COVID-19 con Python</h1>
 
 <p>El <a href="https://drive.google.com/file/d/1j6ph-K_vFo5BSKoXr4QuYaBaOnBZKm4k/view?usp=sharing">set de datos</a> que usaremos para el análisis de las vacunas de COVID-19 fue tomada de Kaggle. Comenzaremos por importar las librerías de Python necesarias y el set de datos:</p>
 
@@ -42,7 +42,7 @@ La opción <code class="language-plaintext highlighter-rouge">max_rows</code> no
             Northern Ireland        289
             Name: country, Length: 175, dtype: int64
 </code></pre></div></div>
-<p>El Reino Unido está conformado por Inglaterra, Escocia, Gales e Irlanda del Norte. Pero en los datos anteriores, estos países se mencionan por separada los mis valores muy parecidos. Esto puede ser un error al registrar estos datos. Podemos arreglar esto de la siguiente manera:</p>
+<p>El Reino Unido está conformado por Inglaterra, Escocia, Gales e Irlanda del Norte. Pero en los datos anteriores, estos países se mencionan por separado con valores muy parecidos. Esto puede ser un error al registrar estos datos. Podemos arreglar esto de la siguiente manera:</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span> <span class="p">[</span><span class="mi">4</span><span class="p">]:</span>     <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">.</span><span class="n">country</span><span class="p">.</span><span class="nb">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s">"Scotland"</span><span class="p">,</span> <span class="s">"England"</span><span class="p">,</span> <span class="s">"Wales"</span><span class="p">,</span> <span class="s">"Northern Ireland"</span><span class="p">])]</span>
             <span class="n">data</span><span class="p">.</span><span class="n">country</span><span class="p">.</span><span class="n">value_counts</span><span class="p">()</span>
 </code></pre></div></div>
