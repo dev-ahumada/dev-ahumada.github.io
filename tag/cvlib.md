@@ -1,6 +1,6 @@
 ---
 layout: tagpage
 title: "Tag: cvlib"
-tag: cblib
+tag: cvlib
 robots: noindex
 ---
