@@ -2,7 +2,7 @@
 layout: post
 title: "Análisis de vacunas Covid-19 con Python"
 subtitle: "Cuantas y cuales vacunas está usando cada país para combatir el COVID-19."
-date: 2021-05-09 00:00:00 -0400
+date: 2021-05-11 00:00:00 -0400
 background: "/img/posts/2021-05-11-analisis-vacunacion-covid19-python/2021-05-11-analisis-vacunacion-covid19-python-1.png"
 categories: posts/machine-learning
 tags: [python, pandas, numpy, plotly]
