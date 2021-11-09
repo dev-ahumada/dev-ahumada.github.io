@@ -1,0 +1,12 @@
+I"<p>Microsoft es hoy una de las empresas de tecnología más grandes con más de 160,000 empleados en todo el mundo. Es conocido por el sistema operativo Windows, que es uno de los sistemas operativos informaticos más populares. En este artículo, vamos a predecir los futuros precios de las acciones de Microsoft con aprendizaje automático usando Python.</p>
+<h1 id="predicción-del-precio-de-las-acciones-de-microsoft">Predicción del precio de las acciones de Microsoft</h1>
+<p>Windows 10 es uno de los sistemas operativos más usados en el mundo. Cuando Microsoft lanzó Windows 10, se anunció que sería la última versión de Windows y que después de eso Microsoft solo trabajaría en sus actualizaciones. Pero ahora, una vez más Microsoft ha atraído la atención del mundo con el lanzamiento de Windows 11. Así que sería un buen momento para predecir el precio de las acciones de Microsoft.</p>
+<h1 id="predicción-del-precio-de-las-acciones-de-microsoft-usando-python">Predicción del precio de las acciones de Microsoft usando Python</h1>
+<p>Para comenzar con la tarea de pronosticar los precios de las acciones de Microsoft, primero debemos tener un conjunto de datos. Entonces, simplemente debemos seguir los pasos mencionados a continuación:</p>
+<ol>
+  <li>Ir al sitio web de <a href="https://es-us.finanzas.yahoo.com/">Yahoo Finanzas</a></li>
+  <li>Buscar <strong>“MSFT”</strong></li>
+  <li>Hacer click en <strong>“Datos históricos”</strong></li>
+  <li>Hacer click en <strong>“Descargar”</strong></li>
+</ol>
+:ET
