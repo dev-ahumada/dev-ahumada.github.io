@@ -1,0 +1,34 @@
+I"�<p>Contar objetos en una imagen es una tarea de visión por computadora. Hay un montón de librerías de visión por computadora en Python que podemos usar para esta tarea. Está vez usaremos un enfoque muy simple para contar objetos en una imagen usando Python.</p>
+
+<h1 id="cómo-contar-objetos-en-una-imagen-usando-python">¿Cómo contar objetos en una imagen usando Python?</h1>
+<p>Hay muchas librerías de visión por computadora que podemos usar para esta tarea, como OpenCV, TensorFlow, Pytorch, Scikit-image y cvlib. Esta última es una librería de visión por computadora muy simple, de alto nivel y fácil de usar en Python.
+Usando las características de esta librería, podemos contar la cantidad de objetos en una imagen usando Python. Para poder usar esta librería, debemos estár seguros de tener OpenCV y TensorFlow instalados en nuestro sistema. Se pueden instalar fácilmente usando el comando: <code class="language-plaintext highlighter-rouge">pip install cvlib</code>.</p>
+
+<h1 id="contar-objetos-en-una-imagen-usando-python">Contar objetos en una imagen usando Python</h1>
+<p>Ahora veremos cómo usar la librería <code class="language-plaintext highlighter-rouge">cvlib</code> para contar el número de objetos en una imagen usando Python. Primero leeremos una imagen usando la librería OpenCV, luego detectaremos todos los objetos particulares usando <code class="language-plaintext highlighter-rouge">cvlib</code>. La imagen que usaremos para esta tarea se muestra a continuación y la podemos descargar <a href="https://drive.google.com/file/d/14hgyVrVxQ3vPNRO2GGHdUxxOpAgoug6n/view?usp=sharing"><strong>aquí</strong></a>
+<img src="/img/posts/2021-05-15-contar-objetos-imagenes-python/vehiculos.jpg" alt="Vehículos" /></p>
+
+<p>Como podemos ver, la imagen que estamos usando aquí para la tarea de contar objetos en una imagen usando Python contiene vehículos. Primero, detectaremos todos los vehículos en la imagen y después contaremos el número de autos que hay entre ellos. A continuación se muestra cómo podemos contar la cantidad de autos en una imagen usando Python:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span>     <span class="kn">import</span> <span class="nn">cv2</span>
+            <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+            <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+            <span class="kn">import</span> <span class="nn">cvlib</span> <span class="k">as</span> <span class="n">cv</span>
+            <span class="kn">from</span> <span class="nn">cvlib.object_detection</span> <span class="kn">import</span> <span class="n">draw_bbox</span>
+            <span class="kn">from</span> <span class="nn">numpy.lib.polynomial</span> <span class="kn">import</span> <span class="n">poly</span>
+
+            <span class="n">imagen</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">imread</span><span class="p">(</span><span class="s">"vehiculos.jpg"</span><span class="p">)</span>
+            <span class="n">cuadro</span><span class="p">,</span> <span class="n">etiqueta</span><span class="p">,</span> <span class="n">contar</span> <span class="o">=</span> <span class="n">cv</span><span class="p">.</span><span class="n">detect_common_objects</span><span class="p">(</span><span class="n">imagen</span><span class="p">)</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">draw_bbox</span><span class="p">(</span><span class="n">imagen</span><span class="p">,</span> <span class="n">cuadro</span><span class="p">,</span> <span class="n">etiqueta</span><span class="p">,</span> <span class="n">contar</span><span class="p">)</span>
+            <span class="n">plt</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+            <span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">"El número de autos en la imagen es "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">etiqueta</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="s">'car'</span><span class="p">)))</span>
+</code></pre></div></div>
+<p>Después de ejecutar el código anterior, veremos una imagen como la que se muestra a continuación:
+<img src="/img/posts/2021-05-15-contar-objetos-imagenes-python/Figure_1.png" alt="Detección de objetos en imagen" />
+Al cerrar nuestra imagen, veremos lo siguiente en nuestra terminal:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>out [1]:    El número de autos en la imagen es 10
+</code></pre></div></div>
+<p>Es así como podemos contar el número de objetos utilizando la librería <code class="language-plaintext highlighter-rouge">cvlib</code> en Python. Recuerda que podemos utilizar esta librería para diversas tareas de visión por computadora.</p>
+
+<p>Puedes descargar el código de este projecto <a href="https://drive.google.com/file/d/1XbnAUrXnXEWMfxvkOcGeFCmf_l6pG6bt/view?usp=sharing"><strong>aquí</strong></a></p>
+:ET

@@ -18,7 +18,7 @@ La detección de spam consiste en detectar los mensajes o correos electrónicos 
 ---
 
 ## Detección de spam usando Python
-A continuación, veremos como entrenar un modelo de aprendizaje automático (**machine learning**) para detectar spam usando Python. Comenzamos esta tarea importando las librerías de Python y el set de datos que necesitaremos.
+A continuación, veremos como entrenar un modelo de aprendizaje automático (**machine learning**) para detectar spam usando Python. Comenzamos esta tarea importando las librerías de Python y el conjunto de datos que necesitaremos.
 ```python
 in [1]:     import pandas as pd
             import numpy as np
@@ -39,7 +39,7 @@ out [1]:        class       message                                             
 ```
   
 
-En esta set de datos, las únicas columnas que necesitamos para entrenar nuestro modelo para la detección de spam son `class` y `message`, así que seleccionamos estas dos columnas como el nuevo set de datos:
+En esta conjunto de datos, las únicas columnas que necesitamos para entrenar nuestro modelo para la detección de spam son `class` y `message`, así que seleccionamos estas dos columnas como el nuevo conjunto de datos:
 ```python
 in [2]:     data = data[["class", "message"]]
 ```
@@ -76,7 +76,7 @@ out [4]:    Escribe un mensaje: Time is running out. Save 50%
             ['spam']
 ```
 ---
-> **NOTA**: Debido a que el set de datos para este projecto está en idioma inglés, el mensaje que proporcionará el usuario final deberá estar escrito en este idioma.  
+> **NOTA**: Debido a que el conjunto de datos para este projecto está en idioma inglés, el mensaje que proporcionará el usuario final deberá estar escrito en este idioma.  
 
 ---
 

@@ -1,0 +1,319 @@
+I"�y<h1 id="análisis-de-las-vacunas-de-covid-19-con-python">Análisis de las vacunas de COVID-19 con Python</h1>
+
+<p>El <a href="https://drive.google.com/file/d/1j6ph-K_vFo5BSKoXr4QuYaBaOnBZKm4k/view?usp=sharing">conjunto de datos</a> que usaremos para el análisis de las vacunas de COVID-19 fue tomada de Kaggle. Comenzaremos por importar las librerías de Python necesarias y el conjunto de datos:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span>     <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+            <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+            <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+            <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="n">sns</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"vacunacion_paises.csv"</span><span class="p">)</span>
+            <span class="n">data</span><span class="p">.</span><span class="n">head</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>out [1]:     	country      iso_code  date 	   total_vaccinations 	people_vaccinated  people_fully_vaccinated  daily_vaccinations_raw  
+            0 	Afghanistan  AFG       2021-02-22  0.0 	                0.0 	           NaN 	                    NaN
+            1 	Afghanistan  AFG       2021-02-23  NaN 	                NaN 	           NaN 	                    NaN
+            2 	Afghanistan  AFG       2021-02-24  NaN 	                NaN 	           NaN 	                    NaN
+            3 	Afghanistan  AFG       2021-02-25  NaN 	                NaN 	           NaN 	                    NaN
+            4 	Afghanistan  AFG       2021-02-26  NaN 	                NaN 	           NaN 	                    NaN
+</code></pre></div></div>
+<hr />
+
+<blockquote>
+  <p><strong>NOTA:</strong> El conjunto de datos tiene más columnas de las que se muestran aquí.</p>
+</blockquote>
+
+<hr />
+
+<p>A continuación, exploraremos un poco más el conjunto de datos. La opción <code class="language-plaintext highlighter-rouge">max_rows</code> nos permite controlar el número de columnas que <code class="language-plaintext highlighter-rouge">pandas</code> imprime. Recibe un entero o  <code class="language-plaintext highlighter-rouge">None</code> para imprimir todas las filas.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span>     <span class="n">pd</span><span class="p">.</span><span class="n">set_option</span><span class="p">(</span><span class="s">"max_rows"</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+</code></pre></div></div>
+<p>Después, contamos el número de entradas que tiene cada país en nuestro conjunto de datos.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span>     <span class="n">data</span><span class="p">.</span><span class="n">country</span><span class="p">.</span><span class="n">value_counts</span><span class="p">()</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>out [3]:    Scotland                290
+            England                 290
+            Seychelles              290
+            Serbia                  290
+            Gibraltar               289
+            United Kingdom          289
+            Wales                   289
+            Northern Ireland        289
+            Name: country, Length: 175, dtype: int64
+</code></pre></div></div>
+<p>El Reino Unido está conformado por Inglaterra, Escocia, Gales e Irlanda del Norte. Pero en los datos anteriores, estos países se mencionan por separado con valores muy parecidos. Esto puede ser un error al registrar los datos. Podemos arreglar esto de la siguiente manera:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span> <span class="p">[</span><span class="mi">4</span><span class="p">]:</span>     <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">.</span><span class="n">country</span><span class="p">.</span><span class="nb">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s">"Scotland"</span><span class="p">,</span> <span class="s">"England"</span><span class="p">,</span> <span class="s">"Wales"</span><span class="p">,</span> <span class="s">"Northern Ireland"</span><span class="p">])]</span>
+            <span class="n">data</span><span class="p">.</span><span class="n">country</span><span class="p">.</span><span class="n">value_counts</span><span class="p">()</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>out [4]:    Serbia                  290
+            Seychelles              290
+            United Kingdom          289
+            Gibraltar               289
+            Singapore               288
+            Albania                 288
+            Jordan                  288
+            Indonesia               288
+            Name: country, Length: 171, dtype: int64
+</code></pre></div></div>
+<p>Ahora, vamos a revisar las vacunas disponibles en este conjunto de datos:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span> <span class="p">[</span><span class="mi">5</span><span class="p">]:</span>     <span class="n">data</span><span class="p">.</span><span class="n">vaccines</span><span class="p">.</span><span class="n">value_counts</span><span class="p">()</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>out [5]:    Johnson&amp;Johnson, Moderna, Oxford/AstraZeneca, Pfizer/BioNTech                                            7102
+            Oxford/AstraZeneca                                                                                       4867
+            Oxford/AstraZeneca, Pfizer/BioNTech                                                                      2963
+            Moderna, Oxford/AstraZeneca, Pfizer/BioNTech                                                             2910
+            Moderna, Pfizer/BioNTech                                                                                 2194
+            Oxford/AstraZeneca, Sinopharm/Beijing                                                                    2174
+            Pfizer/BioNTech                                                                                          2001
+            Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sputnik V                                        1876
+            Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing                                                   1532
+            Oxford/AstraZeneca, Pfizer/BioNTech, Sinovac, Sputnik V                                                  1102
+            Johnson&amp;Johnson, Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sputnik V                       1015
+            Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sinovac                                           966
+            CanSino, Oxford/AstraZeneca, Pfizer/BioNTech, Sinovac                                                     823
+            Oxford/AstraZeneca, Sputnik V                                                                             728
+            Oxford/AstraZeneca, Sinopharm/Beijing, Sinovac, Sputnik V                                                 728
+            Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing                                           701
+            Johnson&amp;Johnson, Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sinovac, Sputnik V      660
+            Johnson&amp;Johnson, Moderna, Pfizer/BioNTech                                                                 640
+            Johnson&amp;Johnson, Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sinovac, Sputnik V               621
+            Johnson&amp;Johnson, Oxford/AstraZeneca                                                                       582
+            Sinopharm/Beijing                                                                                         568
+            Johnson&amp;Johnson, Oxford/AstraZeneca, Sinopharm/Beijing                                                    562
+            Pfizer/BioNTech, Sinovac                                                                                  534
+            Oxford/AstraZeneca, Pfizer/BioNTech, Sinovac                                                              524
+            Johnson&amp;Johnson, Pfizer/BioNTech                                                                          518
+            Sinopharm/Beijing, Sputnik V                                                                              507
+            Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sputnik V                                505
+            Moderna                                                                                                   489
+            Oxford/AstraZeneca, Pfizer/BioNTech, Sputnik V                                                            486
+            Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sinovac                                                     456
+            Covaxin, Oxford/AstraZeneca, Sinopharm/Beijing                                                            452
+            Johnson&amp;Johnson, Oxford/AstraZeneca, Sinopharm/Beijing, Sinovac                                           443
+            Johnson&amp;Johnson, Oxford/AstraZeneca, Pfizer/BioNTech                                                      433
+            Johnson&amp;Johnson, Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing                                   417
+            Oxford/AstraZeneca, Sinovac                                                                               343
+            CanSino, Sinopharm/Beijing, Sinopharm/Wuhan, Sinovac, ZF2001                                              316
+            EpiVacCorona, Sputnik V                                                                                   313
+            CanSino, Johnson&amp;Johnson, Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sinovac, Sputnik V                305
+            CanSino, Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sputnik V                       302
+            Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sputnik V                                                   296
+            Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sinopharm/Wuhan, Sputnik V                        295
+            Johnson&amp;Johnson, Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sputnik V               294
+            Oxford/AstraZeneca, Sinopharm/Beijing, Sputnik V                                                          290
+            Moderna, Pfizer/BioNTech, Sinovac                                                                         288
+            Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sinovac                                  288
+            Covaxin, Oxford/AstraZeneca, Sputnik V                                                                    285
+            Johnson&amp;Johnson, Oxford/AstraZeneca, Pfizer/BioNTech, Sinovac                                             284
+            QazVac, Sinopharm/Beijing, Sputnik V                                                                      269
+            CanSino, Covaxin, Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sinovac, Sputnik V     267
+            Covaxin, Johnson&amp;Johnson, Oxford/AstraZeneca, Sinopharm/Beijing, Sputnik V                                267
+            Pfizer/BioNTech, Sinopharm/Beijing                                                                        260
+            COVIran Barekat, Covaxin, Oxford/AstraZeneca, Sinopharm/Beijing, Soberana02, Sputnik V                    260
+            Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sinovac, Sputnik V                                250
+            Johnson&amp;Johnson, Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sinovac                                    250
+            Covaxin, Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sinovac, Sputnik V              243
+            Moderna, Oxford/AstraZeneca                                                                               243
+            Johnson&amp;Johnson, Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sputnik V                                  237
+            Abdala, Sinopharm/Beijing, Sinopharm/Wuhan, Sputnik V                                                     234
+            Johnson&amp;Johnson, Oxford/AstraZeneca, Sinopharm/Beijing, Sinovac, Sputnik Light, Sputnik V                 226
+            Pfizer/BioNTech, Sputnik V                                                                                226
+            Johnson&amp;Johnson, Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sinovac                          225
+            Medigen, Moderna, Oxford/AstraZeneca, Pfizer/BioNTech                                                     220
+            Moderna, Oxford/AstraZeneca, Sputnik V, ZF2001                                                            210
+            Sputnik V                                                                                                 210
+            Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sputnik Light, Sputnik V                 195
+            Moderna, Oxford/AstraZeneca, Sinopharm/Beijing, Sputnik V                                                 191
+            EpiVacCorona, Oxford/AstraZeneca, Sinopharm/Beijing, Sputnik V                                            183
+            Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sinovac, Sputnik V                                          167
+            Covaxin, Oxford/AstraZeneca                                                                               163
+            Abdala, Soberana02                                                                                        159
+            Johnson&amp;Johnson, Oxford/AstraZeneca, Sinovac                                                              142
+            Johnson&amp;Johnson, Moderna                                                                                   95
+            Johnson&amp;Johnson                                                                                            67
+            Name: vaccines, dtype: int64
+</code></pre></div></div>
+<p>Tenemos una gran variedad de vacunas COVID-19 disponibles en este conjunto de datos. Ahora, creamos un <code class="language-plaintext highlighter-rouge">DataFrame</code> nuevo donde seleccionamos solo la vacuna y los países para explorar qué vacuna se aplicó en cada país:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span> <span class="p">[</span><span class="mi">6</span><span class="p">]:</span>     <span class="n">df</span> <span class="o">=</span> <span class="n">data</span><span class="p">[[</span><span class="s">'vaccines'</span><span class="p">,</span> <span class="s">'country'</span><span class="p">]]</span>
+            <span class="n">df</span><span class="p">.</span><span class="n">head</span><span class="p">()</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>out [6]:       vaccines 	                                        country
+            0  Johnson&amp;Johnson, Oxford/AstraZeneca, Pfizer/Bi... 	Afghanistan
+            1  Johnson&amp;Johnson, Oxford/AstraZeneca, Pfizer/Bi... 	Afghanistan
+            2  Johnson&amp;Johnson, Oxford/AstraZeneca, Pfizer/Bi... 	Afghanistan
+            3  Johnson&amp;Johnson, Oxford/AstraZeneca, Pfizer/Bi... 	Afghanistan
+            4  Johnson&amp;Johnson, Oxford/AstraZeneca, Pfizer/Bi... 	Afghanistan
+</code></pre></div></div>
+<p>A continuación, vamos a ver cuántos países están tomando cada una de las vacunas mencionadas en este conjunto de datos:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span> <span class="p">[</span><span class="mi">7</span><span class="p">]:</span>     <span class="n">dict_</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df</span><span class="p">.</span><span class="n">vaccines</span><span class="p">.</span><span class="n">unique</span><span class="p">():</span>
+                <span class="n">dict_</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">"country"</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">"vaccines"</span><span class="p">]</span><span class="o">==</span><span class="n">i</span><span class="p">].</span><span class="n">index</span><span class="p">]</span>
+
+            <span class="n">vaccines</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">dict_</span><span class="p">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">vaccines</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">vaccines</span><span class="p">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s"> --&gt;&gt; </span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="se">\n\n</span><span class="s">"</span><span class="p">)</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>out [7]:    Johnson&amp;Johnson, Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing --&gt;&gt; {'Cameroon', 'Afghanistan'}
+
+            Oxford/AstraZeneca, Pfizer/BioNTech, Sinovac, Sputnik V --&gt;&gt; {'Bosnia and Herzegovina', 'Oman', 'Azerbaijan', 'Albania'}
+
+            Oxford/AstraZeneca, Sinopharm/Beijing, Sinovac, Sputnik V --&gt;&gt; {'Zimbabwe', 'Algeria', 'Armenia'}
+
+            Oxford/AstraZeneca, Pfizer/BioNTech --&gt;&gt; {'Saint Lucia', 'Panama', 'Costa Rica', 'Saint Kitts and Nevis', 'Andorra', 'Bermuda', 'Saudi Arabia', 'Slovenia', 'Cayman Islands', 'Grenada', 'Kosovo'}
+
+            Oxford/AstraZeneca --&gt;&gt; {'Papua New Guinea', 'Vanuatu', 'Mali', 'Falkland Islands', 'Anguilla', 'Sao Tome and Principe', 'Madagascar', 'Solomon Islands', 'Kiribati', 'Togo', 'Democratic Republic of Congo', 'Nauru', 'Lesotho', 'Fiji', 'Tonga', 'Liberia', 'Ethiopia', 'Saint Vincent and the Grenadines', 'Pitcairn', 'Nigeria', 'Saint Helena', 'Montserrat', 'Samoa', 'Uganda', 'Tuvalu', 'Niue', 'Angola'}
+
+            Oxford/AstraZeneca, Pfizer/BioNTech, Sputnik V --&gt;&gt; {'Nicaragua', 'Antigua and Barbuda'}
+
+            CanSino, Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sputnik V --&gt;&gt; {'Argentina'}
+
+            Pfizer/BioNTech --&gt;&gt; {'Kuwait', 'Cook Islands', 'New Caledonia', 'New Zealand', 'Monaco', 'Turks and Caicos Islands', 'Tokelau', 'Aruba', 'Gibraltar'}
+
+            Moderna, Oxford/AstraZeneca, Pfizer/BioNTech --&gt;&gt; {'United Kingdom', 'Canada', 'Australia', 'Isle of Man', 'Sint Maarten (Dutch part)', 'Rwanda', 'Guernsey', 'Japan', 'Sweden', 'Jersey', 'Finland'}
+
+            Johnson&amp;Johnson, Moderna, Oxford/AstraZeneca, Pfizer/BioNTech --&gt;&gt; {'Germany', 'Croatia', 'Portugal', 'Latvia', 'Ireland', 'Romania', 'South Korea', 'Poland', 'Cyprus', 'Czechia', 'Austria', 'Spain', 'France', 'Iceland', 'Jamaica', 'Estonia', 'Luxembourg', 'Italy', 'Belgium', 'Malta', 'Netherlands', 'Bulgaria', 'Greece', 'Lithuania'}
+
+            Johnson&amp;Johnson, Oxford/AstraZeneca, Pfizer/BioNTech --&gt;&gt; {'Bahamas', 'Eswatini'}
+
+            Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sputnik V --&gt;&gt; {'Serbia', 'Jordan', 'Bahrain', 'Iraq', 'Mongolia', 'Montenegro', 'Lebanon'}
+
+            Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing --&gt;&gt; {'Cape Verde', 'Bangladesh', 'Bhutan'}
+
+            Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing --&gt;&gt; {'Maldives', 'Suriname', 'Peru', 'Trinidad and Tobago', 'Barbados', 'Dominica'}
+
+            Sinopharm/Beijing, Sputnik V --&gt;&gt; {'Kyrgyzstan', 'Belarus'}
+
+            Oxford/AstraZeneca, Sinopharm/Beijing --&gt;&gt; {'Brunei', 'Namibia', 'Niger', 'Mozambique', 'Guinea-Bissau', 'Myanmar', 'Mauritania', 'Senegal', 'Sierra Leone', 'Belize'}
+
+            Oxford/AstraZeneca, Sinovac --&gt;&gt; {'Timor', 'Benin'}
+
+            Johnson&amp;Johnson, Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sputnik V --&gt;&gt; {'Bolivia', 'Morocco', 'Moldova', "Cote d'Ivoire"}
+
+            Moderna, Pfizer/BioNTech --&gt;&gt; {'Bonaire Sint Eustatius and Saba', 'Qatar', 'Liechtenstein', 'Switzerland', 'Curacao', 'Faeroe Islands', 'Israel', 'Norway'}
+
+            Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sinovac --&gt;&gt; {'Botswana', 'Ukraine'}
+
+            Johnson&amp;Johnson, Oxford/AstraZeneca, Pfizer/BioNTech, Sinovac --&gt;&gt; {'Brazil'}
+
+            Johnson&amp;Johnson, Oxford/AstraZeneca --&gt;&gt; {'British Virgin Islands', 'Malawi', 'South Sudan'}
+
+            Johnson&amp;Johnson, Oxford/AstraZeneca, Sinopharm/Beijing --&gt;&gt; {'Burkina Faso', 'Zambia', 'Gambia'}
+
+            Sinopharm/Beijing --&gt;&gt; {'Burundi', 'Equatorial Guinea', 'Gabon', 'Chad'}
+
+            Johnson&amp;Johnson, Oxford/AstraZeneca, Sinopharm/Beijing, Sinovac --&gt;&gt; {'Cambodia', 'Somalia'}
+
+            Covaxin, Oxford/AstraZeneca --&gt;&gt; {'Central African Republic'}
+
+            CanSino, Oxford/AstraZeneca, Pfizer/BioNTech, Sinovac --&gt;&gt; {'Chile', 'Malaysia', 'Ecuador'}
+
+            CanSino, Sinopharm/Beijing, Sinopharm/Wuhan, Sinovac, ZF2001 --&gt;&gt; {'China'}
+
+            Johnson&amp;Johnson, Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sinovac --&gt;&gt; {'Colombia'}
+
+            Covaxin, Oxford/AstraZeneca, Sinopharm/Beijing --&gt;&gt; {'Comoros', 'Mauritius'}
+
+            Moderna, Oxford/AstraZeneca, Sinopharm/Beijing, Sputnik V --&gt;&gt; {'Congo'}
+
+            Abdala, Soberana02 --&gt;&gt; {'Cuba'}
+
+            Johnson&amp;Johnson, Moderna, Pfizer/BioNTech --&gt;&gt; {'Denmark', 'United States'}
+
+            Johnson&amp;Johnson, Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sinovac, Sputnik V --&gt;&gt; {'Egypt', 'Laos', 'Djibouti'}
+
+            Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sinovac --&gt;&gt; {'Dominican Republic', 'El Salvador', 'Georgia', 'Thailand'}
+
+            Johnson&amp;Johnson, Pfizer/BioNTech --&gt;&gt; {'South Africa', 'French Polynesia'}
+
+            Oxford/AstraZeneca, Sputnik V --&gt;&gt; {'Kenya', 'Ghana', 'Guyana'}
+
+            Moderna --&gt;&gt; {'Wallis and Futuna', 'Greenland'}
+
+            Moderna, Oxford/AstraZeneca --&gt;&gt; {'Guatemala'}
+
+            Sputnik V --&gt;&gt; {'Guinea'}
+
+            Johnson&amp;Johnson, Moderna --&gt;&gt; {'Haiti'}
+
+            Johnson&amp;Johnson, Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sputnik V --&gt;&gt; {'Honduras'}
+
+            Pfizer/BioNTech, Sinovac --&gt;&gt; {'Hong Kong', 'Turkey'}
+
+            Johnson&amp;Johnson, Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sputnik V --&gt;&gt; {'Hungary'}
+
+            Covaxin, Oxford/AstraZeneca, Sputnik V --&gt;&gt; {'India'}
+
+            Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sinovac --&gt;&gt; {'Indonesia'}
+
+            COVIran Barekat, Covaxin, Oxford/AstraZeneca, Sinopharm/Beijing, Soberana02, Sputnik V --&gt;&gt; {'Iran'}
+
+            QazVac, Sinopharm/Beijing, Sputnik V --&gt;&gt; {'Kazakhstan'}
+
+            Johnson&amp;Johnson, Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sinovac, Sputnik V --&gt;&gt; {'Tunisia', 'Philippines', 'Libya'}
+
+            Pfizer/BioNTech, Sinopharm/Beijing --&gt;&gt; {'Macao'}
+
+            CanSino, Johnson&amp;Johnson, Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sinovac, Sputnik V --&gt;&gt; {'Mexico'}
+
+            Covaxin, Johnson&amp;Johnson, Oxford/AstraZeneca, Sinopharm/Beijing, Sputnik V --&gt;&gt; {'Nepal'}
+
+            Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sinovac, Sputnik V --&gt;&gt; {'North Macedonia'}
+
+            Oxford/AstraZeneca, Pfizer/BioNTech, Sinovac --&gt;&gt; {'Uruguay', 'Northern Cyprus'}
+
+            CanSino, Covaxin, Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sinovac, Sputnik V --&gt;&gt; {'Pakistan'}
+
+            Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sputnik Light, Sputnik V --&gt;&gt; {'Palestine'}
+
+            Covaxin, Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sinovac, Sputnik V --&gt;&gt; {'Paraguay'}
+
+            EpiVacCorona, Sputnik V --&gt;&gt; {'Russia'}
+
+            Pfizer/BioNTech, Sputnik V --&gt;&gt; {'San Marino'}
+
+            Oxford/AstraZeneca, Sinopharm/Beijing, Sputnik V --&gt;&gt; {'Seychelles'}
+
+            Moderna, Pfizer/BioNTech, Sinovac --&gt;&gt; {'Singapore'}
+
+            Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sputnik V --&gt;&gt; {'Slovakia'}
+
+            Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sputnik V --&gt;&gt; {'Sri Lanka', 'Vietnam'}
+
+            Johnson&amp;Johnson, Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sinovac --&gt;&gt; {'Sudan'}
+
+            Johnson&amp;Johnson, Oxford/AstraZeneca, Sinopharm/Beijing, Sinovac, Sputnik Light, Sputnik V --&gt;&gt; {'Syria'}
+
+            Medigen, Moderna, Oxford/AstraZeneca, Pfizer/BioNTech --&gt;&gt; {'Taiwan'}
+
+            Moderna, Oxford/AstraZeneca, Pfizer/BioNTech, Sinovac, Sputnik V --&gt;&gt; {'Tajikistan'}
+
+            Johnson&amp;Johnson --&gt;&gt; {'Tanzania'}
+
+            EpiVacCorona, Oxford/AstraZeneca, Sinopharm/Beijing, Sputnik V --&gt;&gt; {'Turkmenistan'}
+
+            Oxford/AstraZeneca, Pfizer/BioNTech, Sinopharm/Beijing, Sinopharm/Wuhan, Sputnik V --&gt;&gt; {'United Arab Emirates'}
+
+            Moderna, Oxford/AstraZeneca, Sputnik V, ZF2001 --&gt;&gt; {'Uzbekistan'}
+
+            Abdala, Sinopharm/Beijing, Sinopharm/Wuhan, Sputnik V --&gt;&gt; {'Venezuela'}
+
+            Johnson&amp;Johnson, Oxford/AstraZeneca, Sinovac --&gt;&gt; {'Yemen'}
+</code></pre></div></div>
+<p>Finalmente, visualizamos estos datos para ver qué combinación de vacunas está usando cada país:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span> <span class="p">[</span><span class="mi">8</span><span class="p">]:</span>     <span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="n">px</span>
+            <span class="kn">import</span> <span class="nn">plotly.offline</span> <span class="k">as</span> <span class="n">py</span>
+
+            <span class="n">mapa_vacunacion</span> <span class="o">=</span> <span class="n">px</span><span class="p">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">locations</span> <span class="o">=</span> <span class="s">'iso_code'</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">'vaccines'</span><span class="p">)</span>
+            <span class="n">mapa_vacunacion</span><span class="p">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">margin</span><span class="o">=</span><span class="p">{</span><span class="s">"r"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s">"t"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s">"l"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s">"b"</span><span class="p">:</span><span class="mi">0</span><span class="p">})</span>
+            <span class="n">mapa_vacunacion</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+<p><img src="/img/posts/2021-05-11-analisis-vacunacion-covid19-python/2021-05-11-analisis-vacunacion-covid19-python-2.png" alt="Mapa vacunación mundial" /></p>
+
+<hr />
+
+<p>Así es como podemos analizar el tipo de vacunas que aplicó cada país a sus pobladores en la actualidad.  Podemos explorar más a profundidad este conjunto de datos, ya que hay mucho que puede hacer con estos datos.</p>
+
+<p>Puedes descargar el cuaderno de Jupyter del proyecto <a href="https://drive.google.com/file/d/1A6tf7CMc5X09JKXOL3TI5A-uOTMrV3nI/view?usp=sharing"><strong>aquí</strong></a></p>
+:ET

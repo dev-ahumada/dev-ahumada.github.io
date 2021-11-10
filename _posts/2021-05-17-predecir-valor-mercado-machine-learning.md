@@ -5,7 +5,7 @@ subtitle: "Predicción del precio de las acciones de Microsoft con aprendizaje a
 date: 2021-05-17 00:00:00 -0400
 background: "/img/posts/2021-05-17-predecir-valor-mercado-machine-learning/2021-05-17-predecir-valor-mercado-machine-learning-1.jpeg"
 categories: posts/machine-learning
-tags: [python, opencv, cvlib]
+tags: [python, numpy, pandas, seaborn]
 ---
 Microsoft es hoy una de las empresas de tecnología más grandes con más de 160,000 empleados en todo el mundo. Es conocido por el sistema operativo Windows, que es uno de los sistemas operativos informaticos más populares. En este artículo, vamos a predecir los futuros precios de las acciones de Microsoft con aprendizaje automático usando Python.
 # Predicción del precio de las acciones de Microsoft

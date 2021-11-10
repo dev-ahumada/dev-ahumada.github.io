@@ -13,10 +13,10 @@ La detección de idioma es una tarea del procesamiento de lenguaje natural en do
 
 # Detección de lenguaje
 Como humanos, podemos identificar fácilmente los idiomas que conocemos. Sin embargo, identificar el resto de idiomas existentes nos es casi imposible. Es aquí cuando la detección de mensajes puede ser usada. El Traductor de Google es uno de los más populares traductores en el mundo. También incluye un modelo de aprendizaje automático para detectar el idioma que tu puedes usar si no sabes que idioma es el que deseas traducir.
-La parte más importante de entrenar un modelo para la detección de idiomas son los datos. Cuantos más datos tengamos sobre cada idioma, más preciso será el rendimiento de nuestro modelo en tiempo real. El set de datos que usaremos contiene datos en 22 idiomas diferentes y 1000 frases en cada uno de los idiomas, por lo que será un dataset apropiado para entrenar un detector de idiomas con aprendizaje automático usando Python.
+La parte más importante de entrenar un modelo para la detección de idiomas son los datos. Cuantos más datos tengamos sobre cada idioma, más preciso será el rendimiento de nuestro modelo en tiempo real. El conjunto de datos que usaremos contiene datos en 22 idiomas diferentes y 1000 frases en cada uno de los idiomas, por lo que será un dataset apropiado para entrenar un detector de idiomas con aprendizaje automático usando Python.
 
 # Detección de lenguaje usando Python
-Empezamos la detección de lenguaje con aprendizaje automático importando las librerías de Python necesarias y el set de datos:
+Empezamos la detección de lenguaje con aprendizaje automático importando las librerías de Python necesarias y el conjunto de datos:
 ```python
 in [1]:     import pandas as pd
             import numpy as np
@@ -36,7 +36,7 @@ out [1]:       Text                                               language
             4  de spons behoort tot het geslacht haliclona en...     Dutch 
 ```  
 
-Veamos si este set de datos contiene algún valor `null`:
+Veamos si este conjunto de datos contiene algún valor `null`:
 ```python
 in [2]:     data.isnull().sum()
 ```
@@ -45,7 +45,7 @@ out [2]:    Text        0
             language    0
             dtype: int64
 ```  
-Ahora, veamos todos los idiomas presentes en nuestro set de datos:
+Ahora, veamos todos los idiomas presentes en nuestro conjunto de datos:
 ```python
 in [3]:     data["language"].value_counts()
 ```
@@ -75,7 +75,7 @@ out [3]:    Japanese      1000
             Name: language, dtype: int64
 ```
 
-El set de datos contiene 22 idiomas con 1000 frases cada uno. Este es un set de datos bastante balanceado y sin valores faltantes, por lo que podemos decir que este set de datos está completamente listo para ser usado para entrenar un modelo de aprendizaje automático.
+El conjunto de datos contiene 22 idiomas con 1000 frases cada uno. Este es un conjunto de datos bastante balanceado y sin valores faltantes, por lo que podemos decir que este conjunto de datos está completamente listo para ser usado para entrenar un modelo de aprendizaje automático.
 
 # Modelo para detección de idioma
 A continuación, vamos a dividir nuestra data en un set de entranamiento y un set de prueba:
@@ -106,6 +106,6 @@ in [6]:     usuario = input("Escribe una frase: ")
 out [6]:    Escribe una frase: prueba detector de idiomas
             ['Spanish']
 ```
-Como podemos ver, el modelo trabaja bien. Una cosa a resaltar es que **este modelo solamente puede detectar los idiomas que están presentes en el set de datos.**    
+Como podemos ver, el modelo trabaja bien. Una cosa a resaltar es que **este modelo solamente puede detectar los idiomas que están presentes en el conjunto de datos.**    
 
 Puedes descargar el cuaderno de Jupyter del projecto [aquí](https://drive.google.com/file/d/1204ZuFnzfVu4jo1wvxEADgnOBNG1RFwW/view?usp=sharing)

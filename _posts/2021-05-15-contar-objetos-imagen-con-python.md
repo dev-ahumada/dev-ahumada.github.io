@@ -35,7 +35,7 @@ in [1]:     import cv2
 ```
 Después de ejecutar el código anterior, veremos una imagen como la que se muestra a continuación:
 ![Detección de objetos en imagen](/img/posts/2021-05-15-contar-objetos-imagenes-python/Figure_1.png)
-Después de cerrar nuestra imagen, veremos lo siguiente en nuestra terminal:
+Al cerrar nuestra imagen, veremos lo siguiente en nuestra terminal:
 ```
 out [1]:    El número de autos en la imagen es 10
 ```

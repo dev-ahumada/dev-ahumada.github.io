@@ -1,0 +1,42 @@
+I"d<p>Aproximadamente 3.5 billones de búsquedas se realizan en Google Search diariamente, lo que significa que alrededor de 40,000 búsquedas se realizan cada segundo. Por lo tanto, Google Search es un gran caso de uso para analizar datos basados en consultas de búsqueda. Con eso en mente, analizaremos Google Search con el uso de Python.</p>
+
+<h1 id="análisis-de-google-search-con-python">Análisis de Google Search con Python</h1>
+<p>Google no da mucho acceso a los datos sobre las consultas de búsqueda diarias, pero otra aplicación de Google conocida como Google Trends se puede utilizar para la tarea de análisis de búsqueda de Google. Google Trends proporciona una API que se puede utilizar para analizar las búsquedas diarias en Google. Esta API se conoce como <code class="language-plaintext highlighter-rouge">pytrends</code>, podemos instalarla fácilmente usando el comando <code class="language-plaintext highlighter-rouge">pip install pytrends</code>.</p>
+
+<p>Una vez instalada la librería <code class="language-plaintext highlighter-rouge">pytrends</code> en nuestro sistema, comenzamos con la tarea del análisis de Google Search importando las librerías de Python que vamos a necesitar:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span>     <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+            <span class="kn">from</span> <span class="nn">pytrends.request</span> <span class="kn">import</span> <span class="n">TrendReq</span>
+            <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+            <span class="n">tendencias</span> <span class="o">=</span> <span class="n">TrendReq</span><span class="p">()</span>
+</code></pre></div></div>
+<p>Aquí analizamos las tendencias de búsqueda de Google en las consultas basadas en “Machine Learning”, creamos un <code class="language-plaintext highlighter-rouge">DataFrame</code> de los 10 principales países que buscan “Machine Learning” en Google:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span>     <span class="n">tendencias</span><span class="p">.</span><span class="n">build_payload</span><span class="p">(</span><span class="n">kw_list</span><span class="o">=</span><span class="p">[</span><span class="s">"Machine Learning"</span><span class="p">])</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">tendencias</span><span class="p">.</span><span class="n">interest_by_region</span><span class="p">()</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s">"Machine Learning"</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>out [2]:                 Machine Learning
+            geoName                      
+            China                     100
+            Singapore                  39
+            St. Helena                 28
+            India                      27
+            Hong Kong                  21
+            South Korea                19
+            Nepal                      18
+            Pakistan                   17
+            Israel                     15
+            Bangladesh                 15
+</code></pre></div></div>
+<p>De acuerdo con los resultados anteriores, las consultas basadas en “Machine Learning” se realizan principalmente en Perú. También podemos visualizar estos datos usando un gráfico de barras:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span>     <span class="n">data</span><span class="p">.</span><span class="n">reset_index</span><span class="p">().</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">"geoName"</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">"Machine Learning"</span><span class="p">,</span> 
+                        <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span> <span class="n">kind</span><span class="o">=</span><span class="s">"bar"</span><span class="p">)</span>
+            <span class="n">plt</span><span class="p">.</span><span class="n">style</span><span class="p">.</span><span class="n">use</span><span class="p">(</span><span class="s">'fivethirtyeight'</span><span class="p">)</span>
+            <span class="n">plt</span><span class="p">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'País'</span><span class="p">)</span>
+            <span class="n">plt</span><span class="p">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'Machine Learning'</span><span class="p">)</span>
+            <span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+<p><img src="/img/posts/2021-05-20-analisis-google-search-python/2021-05-20-analisis-google-search-python-2.png" alt="Gráfico de barras" />
+Como sabemos, el Machine Learning ha sido el foco de muchas empresas y estudiantes durante los últimos 3-4 años. Veamos la tendencia de las consultas en Google Search basadas en “Machine Learning” para comprender cómo incrementa o disminuye.</p>
+:ET

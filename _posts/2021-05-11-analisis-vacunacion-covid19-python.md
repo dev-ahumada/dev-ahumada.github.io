@@ -9,7 +9,7 @@ tags: [python, pandas, numpy, plotly]
 ---
 # Análisis de las vacunas de COVID-19 con Python
 
-El [set de datos](https://drive.google.com/file/d/1j6ph-K_vFo5BSKoXr4QuYaBaOnBZKm4k/view?usp=sharing) que usaremos para el análisis de las vacunas de COVID-19 fue tomada de Kaggle. Comenzaremos por importar las librerías de Python necesarias y el set de datos:
+El [conjunto de datos](https://drive.google.com/file/d/1j6ph-K_vFo5BSKoXr4QuYaBaOnBZKm4k/view?usp=sharing) que usaremos para el análisis de las vacunas de COVID-19 fue tomada de Kaggle. Comenzaremos por importar las librerías de Python necesarias y el conjunto de datos:
 
 ```python
 in [1]:     import numpy as np
@@ -30,15 +30,15 @@ out [1]:     	country      iso_code  date 	   total_vaccinations 	people_vaccina
 ```  
 ---  
 
->**NOTA:** El set de datos tiene más columnas de las que se muestran aquí.  
+>**NOTA:** El conjunto de datos tiene más columnas de las que se muestran aquí.  
 
 ---  
 
-A continuación, exploraremos un poco más el set de datos. La opción `max_rows` nos permite controlar el número de columnas que `pandas` imprime. Recibe un entero o  `None` para imprimir todas las filas.
+A continuación, exploraremos un poco más el conjunto de datos. La opción `max_rows` nos permite controlar el número de columnas que `pandas` imprime. Recibe un entero o  `None` para imprimir todas las filas.
 ```python
 in [2]:     pd.set_option("max_rows", None)
 ```
-Después, contamos el número de entradas que tiene cada país en nuestro set de datos.
+Después, contamos el número de entradas que tiene cada país en nuestro conjunto de datos.
 ```python
 in [3]:     data.country.value_counts()
 ```
@@ -69,7 +69,7 @@ out [4]:    Serbia                  290
             Indonesia               288
             Name: country, Length: 171, dtype: int64
 ```
-Ahora, vamos a revisar las vacunas disponibles en este set de datos:
+Ahora, vamos a revisar las vacunas disponibles en este conjunto de datos:
 ```python
 in [5]:     data.vaccines.value_counts()
 ```
@@ -149,7 +149,7 @@ out [5]:    Johnson&Johnson, Moderna, Oxford/AstraZeneca, Pfizer/BioNTech       
             Johnson&Johnson                                                                                            67
             Name: vaccines, dtype: int64
 ```
-Tenemos una gran variedad de vacunas COVID-19 disponibles en este set de datos. Ahora, creamos un `DataFrame` nuevo donde seleccionamos solo la vacuna y los países para explorar qué vacuna se aplicó en cada país:
+Tenemos una gran variedad de vacunas COVID-19 disponibles en este conjunto de datos. Ahora, creamos un `DataFrame` nuevo donde seleccionamos solo la vacuna y los países para explorar qué vacuna se aplicó en cada país:
 ```python
 in [6]:     df = data[['vaccines', 'country']]
             df.head()
@@ -162,7 +162,7 @@ out [6]:       vaccines 	                                        country
             3  Johnson&Johnson, Oxford/AstraZeneca, Pfizer/Bi... 	Afghanistan
             4  Johnson&Johnson, Oxford/AstraZeneca, Pfizer/Bi... 	Afghanistan
 ```
-A continuación, vamos a ver cuántos países están tomando cada una de las vacunas mencionadas en este set de datos:
+A continuación, vamos a ver cuántos países están tomando cada una de las vacunas mencionadas en este conjunto de datos:
 ```python
 in [7]:     dict_ = {}
             for i in df.vaccines.unique():
