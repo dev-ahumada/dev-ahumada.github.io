@@ -1,0 +1,56 @@
+I"H&<p>Las fake news son uno de lo mayores problemas de las redes sociales e incluso de los sitios de noticias. Por lo tanto, usar Machine Learning para la detección de fake news es una tarea muy compleja.</p>
+
+<h1 id="detección-de-fake-news">Detección de Fake News</h1>
+<p>Las fake news generan desinformación. La mayoría de las veces, difundir noticias falsas sobre las creencias políticas y religiosas de una comunidad puede provocar disturbios y violencia. Entonces, para detectar fake news, debemos encontrar relaciones entre los titulares de fake news para poder entrenar un modelo de Machine Learning que pueda decirnos si una información en particular es falsa o real simplemente observando el titular de la noticia.</p>
+
+<h1 id="detección-de-fake-news-usando-python">Detección de Fake News usando Python</h1>
+<p>El <a href="https://drive.google.com/file/d/1JTBaMn56PH8bKebqMXyNKCSCiRSxgyZ-/view?usp=sharing">conjunto de datos</a> que usaremos para la tarea de detectar fake news contiene datos sobre el título de la noticia, el contenido de la noticia y una columna llamada <code class="language-plaintext highlighter-rouge">label</code> que nos indica si la noticia es falsa o real. Por lo tanto, podemos usar este conjunto de datos para encontrar relaciones entre los titulares de noticias falsas y reales para comprender qué tipo de titulares se encuentran en la mayoría de las fake news. Para empezar, importamos las librerías de Python y el conjunto de datos que necesitamos:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span>     <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+            <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+            <span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">CountVectorizer</span>
+            <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+            <span class="kn">from</span> <span class="nn">sklearn.naive_bayes</span> <span class="kn">import</span> <span class="n">MultinomialNB</span>
+
+            <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"news.csv"</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">head</span><span class="p">())</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>out [1]:       Unnamed: 0                                              title                                                text   label
+            0  8476                             You Can Smell Hillary’s Fear   Daniel Greenfield, a Shillman Journalism Fello...    FAKE
+            1  10294       Watch The Exact Moment Paul Ryan Committed Pol...   Google Pinterest Digg Linkedin Reddit Stumbleu...    FAKE
+            2  3608              Kerry to go to Paris in gesture of sympathy   U.S. Secretary of State John F. Kerry said Mon...    FAKE
+            3  10142       Bernie supporters on Twitter erupt in anger ag...   — Kaydee King (@KaydeeKing) November 9, 2016 T...    FAKE
+            4  875          The Battle of New York: Why This Primary Matters   It's primary day in New York and front-runners...    REAL
+</code></pre></div></div>
+<p>Este conjunto de datos es muy grande pero, afortunadamente, no tiene valores faltantes. Por lo tanto, usaremos no necesitamos hacer ningun pre-procesamiento de los datos. Tomaremos la columna  <code class="language-plaintext highlighter-rouge">title</code> como nuestra variable de entrada para entrenar un modelo de Machine Learning y la columna <code class="language-plaintext highlighter-rouge">label</code> será nuestra variable a predecir:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span>     <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">"title"</span><span class="p">])</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">"label"</span><span class="p">])</span>
+
+            <span class="n">cv</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">()</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">cv</span><span class="p">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</code></pre></div></div>
+<p>Ahora, vamos a separar el conjunto de datos en conjuntos de entrenamiento y de prueba. Después, usaremos el algoritmo de Naive Bayes Multinomial para entrenar nuestro modelo de detección de fake news:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span>     <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+            <span class="n">modelo</span> <span class="o">=</span> <span class="n">MultinomialNB</span><span class="p">()</span>
+            <span class="n">modelo</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">modelo</span><span class="p">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">))</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>out [3]:    0.8074191002367798
+</code></pre></div></div>
+<p>Ahora probemos este modelo. Para probarlo, primero escribimos el título de cualquier noticia que encontremos en Google News para ver lo que predice:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span> <span class="p">[</span><span class="mi">4</span><span class="p">]:</span>     <span class="n">titulo</span> <span class="o">=</span> <span class="s">"Biden administration grants temporary protected status to Haitians living in U.S."</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">cv</span><span class="p">.</span><span class="n">transform</span><span class="p">([</span><span class="n">titulo</span><span class="p">]).</span><span class="n">toarray</span><span class="p">()</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">modelo</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>out [4]:    ['REAL']  
+</code></pre></div></div>
+<p>Finalmente, vamos a escribir una fake news al azar para ver si el modelo la predice como falsa:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span> <span class="p">[</span><span class="mi">5</span><span class="p">]:</span>     <span class="n">titulo</span> <span class="o">=</span> <span class="s">"Chlorine products can cure coronavirus"</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">cv</span><span class="p">.</span><span class="n">transform</span><span class="p">([</span><span class="n">titulo</span><span class="p">]).</span><span class="n">toarray</span><span class="p">()</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">modelo</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>out [5]:    ['FAKE']
+</code></pre></div></div>
+<p>Así es como podemos entrenar un modelo de Machine Learning para la tarea de detección de fake news utilizando Python.</p>
+
+<p>Puedes descargar el cuaderno de Jupyter del projecto <a href="https://drive.google.com/file/d/1iRo1j9Ib-9_01ld1wrnGcIftFZ9IwaBy/view?usp=sharing">aquí</a></p>
+:ET
