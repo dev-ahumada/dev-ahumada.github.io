@@ -1,0 +1,9 @@
+I"X<p>Comenzamos la tarea de analizar a los atletas profesionales mejor pagados importando las librerías de Python y el conjunto de datos que vamos a necesitar.
+```python
+in[1]:	import numpy as np
+	import pandas as pd
+	import seaborn as sns
+	import matplotlib.pyplot as plt
+	sns.set(style=”darkgrid”)
+	plt.style.use(“seaborn-pastel”)</p>
+:ET

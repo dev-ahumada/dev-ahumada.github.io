@@ -1,0 +1,158 @@
+I"'{<p>Comenzamos la tarea de analizar a los atletas profesionales mejor pagados importando las librerías de Python y el conjunto de datos que vamos a necesitar.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>	<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+	<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+	<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="n">sns</span>
+	<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+	<span class="n">sns</span><span class="p">.</span><span class="nb">set</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s">"darkgrid"</span><span class="p">)</span>
+	<span class="n">plt</span><span class="p">.</span><span class="n">style</span><span class="p">.</span><span class="n">use</span><span class="p">(</span><span class="s">"seaborn-pastel"</span><span class="p">)</span>
+
+	<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s">"Forbes Athlete List 2012-2019.xlsx"</span><span class="p">)</span>
+	<span class="n">df</span><span class="p">.</span><span class="n">head</span><span class="p">()</span>
+</code></pre></div></div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">out</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>	<span class="n">Rank</span>	<span class="n">Name</span>			<span class="n">Pay</span>		<span class="n">Salary</span><span class="o">/</span><span class="n">Winnings</span>		<span class="n">Endorsements</span>	<span class="n">Sport</span>	<span class="n">Year</span>
+	<span class="c1">#1	Lionel Messi		$127 M		$92 M			$35 M		Soccer	2019
+</span>	<span class="c1">#2	Cristiano Ronaldo	$109 M		$65 M			$44 M		Soccer	2019
+</span>	<span class="c1">#3	Neymar			$105 M		$75 M			$30 M		Soccer	2019
+</span>	<span class="c1">#4	Canelo Alvarez		$94 M		$92 M			$2 M		Boxing	2019
+</span>	<span class="c1">#5	Roger Federer		$93.4 M		$7.4 M			$86 M		Tennis	2019
+</span></code></pre></div></div>
+
+<p>Nuestro conjunto de datos contiene 7 columnas y 795 filas, vamos a describir cada una de sus características:</p>
+
+<ul>
+  <li><strong>Rank:</strong> Clasificación anual basada en los ingresos por año.</li>
+  <li><strong>Name:</strong> Nombre del atleta.</li>
+  <li><strong>Pay:</strong> Ingresos totales al año.</li>
+  <li><strong>Salary/Winnning:</strong> Ingresos por salarios al año</li>
+  <li><strong>Endorsements:</strong> Ingresos procedentes de la publicidad, medios de comunicación y patrocinadores al año.</li>
+  <li><strong>Sport:</strong> Deporte que practica el atleta.</li>
+  <li><strong>Year:</strong> Año</li>
+</ul>
+
+<p>El conjunto de datos que estamos utilizando es de Forbes. Algunas columnas no son consistentes en el conjunto de datos debido a que Forbes ha agregado un <code class="language-plaintext highlighter-rouge">#</code> antes de los valores en la columna <code class="language-plaintext highlighter-rouge">Rank</code>. Vamos a arreglar esto y quitar el signo de dólar <code class="language-plaintext highlighter-rouge">$</code> y <code class="language-plaintext highlighter-rouge">M</code>. Además, cambiamos los nombres de las columnas de nuestro conjunto de datos y el nombre de los deportes dentro de la columna <code class="language-plaintext highlighter-rouge">Deporte</code> para una mejor comprensión de nuestro conjunto de datos.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> 	<span class="n">df</span><span class="p">.</span><span class="n">Rank</span> <span class="o">=</span> <span class="n">df</span><span class="p">.</span><span class="n">Rank</span><span class="p">.</span><span class="nb">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">"#"</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="p">.</span><span class="nb">str</span> <span class="k">else</span> <span class="n">x</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">.</span><span class="n">Pay</span> <span class="o">=</span> <span class="n">df</span><span class="p">.</span><span class="n">Pay</span><span class="p">.</span><span class="nb">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">" "</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">"$"</span><span class="p">)[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">df</span><span class="p">.</span><span class="n">Endorsements</span> <span class="o">=</span> <span class="n">df</span><span class="p">.</span><span class="n">Endorsements</span><span class="p">.</span><span class="nb">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">" "</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">"$"</span><span class="p">)[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">df</span><span class="p">[</span><span class="s">"Salary/Winnings"</span><span class="p">].</span><span class="n">replace</span><span class="p">(</span><span class="s">"-"</span><span class="p">,</span><span class="s">'$nan M'</span><span class="p">,</span><span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s">"Salary/Winnings"</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">"Salary/Winnings"</span><span class="p">].</span><span class="nb">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">" "</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">"$"</span><span class="p">)[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">df</span><span class="p">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s">'Ranking'</span><span class="p">,</span> <span class="s">'Nombre'</span><span class="p">,</span> <span class="s">'Ingresos'</span><span class="p">,</span> <span class="s">'Salario'</span><span class="p">,</span> <span class="s">'Patrocinio'</span><span class="p">,</span> <span class="s">'Deporte'</span><span class="p">,</span> <span class="s">'Año'</span><span class="p">]</span>
+    <span class="n">df</span><span class="p">.</span><span class="n">Deporte</span><span class="p">.</span><span class="n">replace</span><span class="p">({</span><span class="s">"Soccer"</span><span class="p">:</span><span class="s">"Fútbol"</span><span class="p">,</span> <span class="s">"Football"</span><span class="p">:</span><span class="s">"Fútbol Americano"</span><span class="p">,</span> <span class="s">"Baseball"</span><span class="p">:</span><span class="s">"Beisbol"</span><span class="p">,</span>
+                    <span class="s">"Basketball"</span><span class="p">:</span><span class="s">"Basquetbol"</span><span class="p">,</span> <span class="s">"Mixed Martial Arts"</span><span class="p">:</span><span class="s">"MMA"</span><span class="p">,</span> <span class="s">"Auto racing"</span><span class="p">:</span><span class="s">"Automovilismo"</span><span class="p">,</span>
+                    <span class="s">"Auto Racing"</span><span class="p">:</span><span class="s">"Automovilismo"</span><span class="p">,</span> <span class="s">"Tennis"</span><span class="p">:</span><span class="s">"Tenis"</span><span class="p">,</span> <span class="s">"Boxing"</span><span class="p">:</span><span class="s">"Boxeo"</span><span class="p">,</span><span class="s">"Basketbal"</span><span class="p">:</span><span class="s">"Basquetbol"</span><span class="p">,</span>
+                    <span class="s">"Motorcycle"</span><span class="p">:</span><span class="s">"Motociclismo"</span><span class="p">,</span> 
+                    <span class="p">},</span><span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">.</span><span class="n">head</span><span class="p">()</span>
+</code></pre></div></div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">out</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">Ranking</span>   <span class="n">Nombre</span> 	      <span class="n">Ingresos</span> 	 <span class="n">Salario</span>   <span class="n">Patrocinio</span>   <span class="n">Deporte</span>   <span class="n">Año</span>
+ 	<span class="mi">1</span> 	  <span class="n">Lionel</span> <span class="n">Messi</span> 	      <span class="mf">127.0</span> 	 <span class="mf">92.0</span> 	   <span class="mf">35.0</span> 	<span class="n">Fútbol</span> 	  <span class="mi">2019</span>
+ 	<span class="mi">2</span> 	  <span class="n">Cristiano</span> <span class="n">Ronaldo</span>   <span class="mf">109.0</span> 	 <span class="mf">65.0</span> 	   <span class="mf">44.0</span> 	<span class="n">Fútbol</span> 	  <span class="mi">2019</span>
+ 	<span class="mi">3</span> 	  <span class="n">Neymar</span> 	      <span class="mf">105.0</span> 	 <span class="mf">75.0</span> 	   <span class="mf">30.0</span> 	<span class="n">Fútbol</span> 	  <span class="mi">2019</span>
+ 	<span class="mi">4</span> 	  <span class="n">Canelo</span> <span class="n">Alvarez</span>      <span class="mf">94.0</span> 	 <span class="mf">92.0</span> 	   <span class="mf">2.0</span> 	        <span class="n">Boxeo</span> 	  <span class="mi">2019</span>
+ 	<span class="mi">5</span> 	  <span class="n">Roger</span> <span class="n">Federer</span>       <span class="mf">93.4</span> 	 <span class="mf">7.4</span> 	   <span class="mf">86.0</span> 	<span class="n">Tenis</span> 	  <span class="mi">2019</span>
+</code></pre></div></div>
+
+<p>Buscamos valores nulos en nuestro conjunto de datos y procedemos a eliminarlos</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span>	<span class="n">df</span><span class="p">.</span><span class="n">isnull</span><span class="p">().</span><span class="nb">any</span><span class="p">()</span>
+</code></pre></div></div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span>	<span class="n">Ranking</span>       <span class="bp">False</span>
+	<span class="n">Nombre</span>        <span class="bp">False</span>
+	<span class="n">Ingresos</span>      <span class="bp">False</span>
+	<span class="n">Salario</span>        <span class="bp">True</span>
+	<span class="n">Patrocinio</span>    <span class="bp">False</span>
+	<span class="n">Deporte</span>       <span class="bp">False</span>
+	<span class="n">Año</span>           <span class="bp">False</span>
+	<span class="n">dtype</span><span class="p">:</span> <span class="nb">bool</span>
+</code></pre></div></div>
+<p>Podemos ver que la columna <code class="language-plaintext highlighter-rouge">Salario</code> contiene valores nulos. A continuación, buscamos más detalles:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span>	<span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">"Salario"</span><span class="p">].</span><span class="n">isnull</span><span class="p">()]</span>
+</code></pre></div></div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">out</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span>	     <span class="n">Ranking</span>    <span class="n">Nombre</span>		    <span class="n">Ingresos</span>   <span class="n">Salario</span>   <span class="n">Patrocinio</span>   <span class="n">Deporte</span>      <span class="n">Año</span>
+	<span class="mi">520</span>  <span class="mi">79</span>         <span class="n">Russell</span> <span class="n">Westbrook</span>   <span class="mf">0.0</span>	       <span class="n">NaN</span>	 <span class="mf">0.0</span>          <span class="n">Basquetbol</span>   <span class="mi">2015</span>
+</code></pre></div></div>
+
+<p>Nuestro conjunto de datos tiene una instancia con valores nulos. Procedemos a eliminarla usando el índice de dicha instancia.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span><span class="p">[</span><span class="mi">5</span><span class="p">]:</span>	<span class="n">df</span><span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="mi">520</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Finalmente, verificamos que nuestro conjunto de datos no tenga más valores nulos.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span><span class="p">[</span><span class="mi">6</span><span class="p">]:</span>	<span class="n">df</span><span class="p">.</span><span class="n">isnull</span><span class="p">().</span><span class="nb">any</span><span class="p">()</span>
+</code></pre></div></div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">out</span><span class="p">[</span><span class="mi">6</span><span class="p">]:</span>	<span class="n">Ranking</span>       <span class="bp">False</span>
+	<span class="n">Nombre</span>        <span class="bp">False</span>
+	<span class="n">Ingresos</span>      <span class="bp">False</span>
+	<span class="n">Salario</span>       <span class="bp">False</span>
+	<span class="n">Patrocinio</span>    <span class="bp">False</span>
+	<span class="n">Deporte</span>       <span class="bp">False</span>
+	<span class="n">Año</span>           <span class="bp">False</span>
+	<span class="n">dtype</span><span class="p">:</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Ahora que nuestro conjunto de datos ya no contiene valores nulos podemos visualizar los atletas mejor pagados del mundo en base al deporte que practican</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span><span class="p">[</span><span class="mi">7</span><span class="p">]:</span>	<span class="n">df</span><span class="p">.</span><span class="n">groupby</span><span class="p">(</span><span class="s">"Nombre"</span><span class="p">).</span><span class="n">first</span><span class="p">()[</span><span class="s">"Deporte"</span><span class="p">].</span><span class="n">value_counts</span><span class="p">().</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s">"pie"</span><span class="p">,</span> <span class="n">autopct</span><span class="o">=</span><span class="s">"%.0f%%"</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span><span class="n">wedgeprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mf">0.4</span><span class="p">),</span><span class="n">pctdistance</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+	<span class="n">plt</span><span class="p">.</span><span class="n">ylabel</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+	<span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">"Atletas mejor pagados por deporte"</span><span class="p">,</span><span class="n">fontweight</span><span class="o">=</span><span class="s">"bold"</span><span class="p">)</span>
+	<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+<p><img src="/img/posts/2022-01-07-analisis-deportistas-mejor-pagados-python/2022-01-07-analisis-deportistas-mejor-pagados-python-1.png" alt="Imagen Original" /></p>
+
+<p>Algunos deportes representan menos del 1% del conjunto de datos. Procedemos a eliminarlos para una mejor visualizacion de los datos.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span><span class="p">[</span><span class="mi">8</span><span class="p">]:</span>  <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s">"Deporte"</span><span class="p">]</span> <span class="o">!=</span> <span class="s">"MMA"</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">"Deporte"</span><span class="p">]</span> <span class="o">!=</span> <span class="s">"Track"</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">"Deporte"</span><span class="p">]</span> <span class="o">!=</span> <span class="s">"Motociclismo"</span><span class="p">)]</span>
+        <span class="n">df</span><span class="p">.</span><span class="n">groupby</span><span class="p">(</span><span class="s">"Nombre"</span><span class="p">).</span><span class="n">first</span><span class="p">()[</span><span class="s">"Deporte"</span><span class="p">].</span><span class="n">value_counts</span><span class="p">().</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s">"pie"</span><span class="p">,</span><span class="n">autopct</span><span class="o">=</span><span class="s">"%.0f%%"</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span><span class="n">wedgeprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mf">0.4</span><span class="p">),</span><span class="n">pctdistance</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+        <span class="n">plt</span><span class="p">.</span><span class="n">ylabel</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+        <span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">"Atletas mejor pagados por deporte"</span><span class="p">,</span><span class="n">fontweight</span><span class="o">=</span><span class="s">"bold"</span><span class="p">)</span>
+        <span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+<p><img src="/img/posts/2022-01-07-analisis-deportistas-mejor-pagados-python/2022-01-07-analisis-deportistas-mejor-pagados-python-2.png" alt="Imagen Original" /></p>
+
+<p>Para poder crear nuestra barra de animación del acumulado de ingresos de los atletas mejor pagados del mundo debemos convertir la columna <code class="language-plaintext highlighter-rouge">Año</code> en un objeto <code class="language-plaintext highlighter-rouge">DateTime</code>.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span><span class="p">[</span><span class="mi">9</span><span class="p">]:</span>  <span class="n">df</span><span class="p">.</span><span class="n">Año</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">.</span><span class="n">Año</span><span class="p">,</span><span class="nb">format</span><span class="o">=</span><span class="s">"%Y"</span><span class="p">)</span>
+</code></pre></div></div>
+<p>Después, creamos una tabla dinámica donde las columnas están compuestas por los nombres de los atletas y los índices por los años.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span><span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="n">racing_bar_data</span> <span class="o">=</span> <span class="n">df</span><span class="p">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="s">"Ingresos"</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="s">"Año"</span><span class="p">,</span><span class="n">columns</span><span class="o">=</span><span class="s">"Nombre"</span><span class="p">)</span>
+        <span class="n">racing_bar_data</span><span class="p">.</span><span class="n">head</span><span class="p">()</span>
+</code></pre></div></div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">out</span><span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="n">Nombre</span>       <span class="n">A</span><span class="p">.</span><span class="n">J</span><span class="p">.</span> <span class="n">Burnett</span>   <span class="n">A</span><span class="p">.</span><span class="n">J</span><span class="p">.</span> <span class="n">Green</span>   <span class="n">Aaron</span> <span class="n">Donald</span>   <span class="n">Aaron</span> <span class="n">Rodgers</span>   <span class="n">Adam</span> <span class="n">Wainwright</span>
+         <span class="n">Año</span>
+         <span class="mi">2012</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span>            <span class="n">NaN</span>          <span class="n">NaN</span>            <span class="n">NaN</span>             <span class="n">NaN</span>               <span class="n">NaN</span>
+         <span class="mi">2013</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span>           <span class="mf">16.6</span>          <span class="n">NaN</span>            <span class="n">NaN</span>            <span class="mf">49.0</span>               <span class="n">NaN</span>
+         <span class="mi">2014</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span>            <span class="n">NaN</span>          <span class="n">NaN</span>            <span class="n">NaN</span>            <span class="mf">22.0</span>               <span class="n">NaN</span>
+         <span class="mi">2015</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span>            <span class="n">NaN</span>          <span class="n">NaN</span>            <span class="n">NaN</span>            <span class="mf">19.1</span>              <span class="mf">19.8</span>
+         <span class="mi">2016</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span>            <span class="n">NaN</span>         <span class="mf">33.3</span>            <span class="n">NaN</span>             <span class="n">NaN</span>               <span class="n">NaN</span>
+</code></pre></div></div>
+
+<p>La mayoría de los atletas tienen valores <code class="language-plaintext highlighter-rouge">NaN</code>. Solo por curiosidad, veamos cuales son los atletas que aparecen de manera constante desde el 2012 en el Top 100 de los atletas mejor pagados del mundo.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span><span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="n">racing_bar_data</span><span class="p">.</span><span class="n">columns</span><span class="p">[</span><span class="n">racing_bar_data</span><span class="p">.</span><span class="n">isnull</span><span class="p">().</span><span class="nb">sum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+</code></pre></div></div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">out</span><span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="n">Index</span><span class="p">([</span><span class="s">'Carmelo Anthony'</span><span class="p">,</span> <span class="s">'Cristiano Ronaldo'</span><span class="p">,</span> <span class="s">'Dwight Howard'</span><span class="p">,</span>
+         <span class="s">'Justin Verlander'</span><span class="p">,</span> <span class="s">'LeBron James'</span><span class="p">,</span> <span class="s">'Lionel Messi'</span><span class="p">,</span> <span class="s">'Phil Mickelson'</span><span class="p">,</span>
+         <span class="s">'Rafael Nadal'</span><span class="p">,</span> <span class="s">'Roger Federer'</span><span class="p">,</span> <span class="s">'Tiger Woods'</span><span class="p">],</span>
+         <span class="n">dtype</span><span class="o">=</span><span class="s">'object'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'Nombre'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Ahora vamos a interpolar los valores de forma lineal, y rellenaremos los valores <code class="language-plaintext highlighter-rouge">NaN</code> restantes con el método <strong>backfilling</strong>. El método <code class="language-plaintext highlighter-rouge">bfill</code> reemplaza los valores nulos con los valores de la siguiente fila.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span><span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="n">racing_bar_completa</span> <span class="o">=</span> <span class="n">racing_bar_data</span><span class="p">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s">"linear"</span><span class="p">).</span><span class="n">fillna</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s">"bfill"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Ahora convertimos los datos en una suma acumulativa de los ingresos de cada atleta a lo largo de varios años.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span><span class="p">[</span><span class="mi">13</span><span class="p">]:</span> <span class="n">racing_bar_completa</span> <span class="o">=</span> <span class="n">racing_bar_completa</span><span class="p">.</span><span class="n">cumsum</span><span class="p">()</span>
+        <span class="n">racing_bar_completa</span><span class="p">.</span><span class="n">head</span><span class="p">()</span>
+</code></pre></div></div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">out</span><span class="p">[</span><span class="mi">13</span><span class="p">]:</span> <span class="n">Nombre</span>      <span class="n">A</span><span class="p">.</span><span class="n">J</span><span class="p">.</span> <span class="n">Burnett</span>   <span class="n">A</span><span class="p">.</span><span class="n">J</span><span class="p">.</span> <span class="n">Green</span>   <span class="n">Aaron</span> <span class="n">Donald</span>   <span class="n">Aaron</span> <span class="n">Rodgers</span>   <span class="n">Adam</span> <span class="n">Wainwright</span>
+         <span class="n">Año</span>
+         <span class="mi">2012</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span>          <span class="mf">16.6</span>         <span class="mf">33.3</span>           <span class="mf">41.4</span>           <span class="mf">49.00</span>              <span class="mf">19.8</span>
+         <span class="mi">2013</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> 	     <span class="mf">33.2</span>         <span class="mf">66.6</span>           <span class="mf">82.8</span>           <span class="mf">98.00</span>              <span class="mf">39.6</span>
+         <span class="mi">2014</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> 	     <span class="mf">49.8</span>         <span class="mf">99.9</span>          <span class="mf">124.2</span>          <span class="mf">120.00</span>              <span class="mf">59.4</span>
+         <span class="mi">2015</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> 	     <span class="mf">66.4</span>        <span class="mf">133.2</span> 	        <span class="mf">165.6</span>          <span class="mf">139.10</span>              <span class="mf">79.2</span>
+</code></pre></div></div>
+:ET
