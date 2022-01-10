@@ -5,7 +5,7 @@ subtitle: ""
 date: 2022-01-07 00:00:00 -0400
 background: "/img/posts/2022-01-07-analisis-deportistas-mejor-pagados-python/2022-01-07-analisis-deportistas-mejor-pagados-python-3.png"
 categories: posts/machine-learning
-tags: [python, numpy, pandas, scikit-learn]
+tags: [python, numpy, pandas, matplotlib]
 ---
 
 Comenzamos la tarea de analizar a los atletas profesionales mejor pagados importando las librerías de Python y el conjunto de datos que vamos a necesitar.
